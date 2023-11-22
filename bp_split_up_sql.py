@@ -25,13 +25,13 @@ def split_sql_input(myblob: func.InputStream):
     """Split the uploaded SQL file, if it contains more than one SP/Functions/Views then the SQL script will be split into individual txt file"""
     try:
         
-        # blobService = BlobServiceClient.from_connection_string(conn_str = "kittsqlmodelconnectionstring")
-        # blob_client = blobService.get_blob_client(myblob.name[0:myblob.name.find("/")], myblob.name[myblob.name.find("/")+1:])
+        blobService = BlobServiceClient.from_connection_string(conn_str = os.environ.get("AzureWebJobsStorage"))
+        blob_client = blobService.get_blob_client(myblob.name[0:myblob.name.find("/")], myblob.name[myblob.name.find("/")+1:])
         try:
-            sqllines = myblob.read().decode('utf-8')
+            sqllines = blob_client.download_blob().readall().decode('utf-8')
         except: 
             try:
-                sqllines = myblob.read().decode('utf-16')
+                sqllines = blob_client.download_blob().readall().decode('utf-16')
             except Exception as e:
                 print(f"The input file {myblob.name} cannot open!")
 
