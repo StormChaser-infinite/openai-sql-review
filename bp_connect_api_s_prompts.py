@@ -5,6 +5,7 @@ import pymongo
 import datetime as dt
 import logging
 import json
+import sqlparse
 
 
 input_container = 'sql-selected'
@@ -26,6 +27,11 @@ def openai_s_prompts(myblob: func.InputStream):
     save_reponses(response)
 
 
+def trim_sql_query(sqistring: str):
+    """Clean up all the comments in the input SQL query"""
+    sql_cleaned = sqlparse.format(sqistring, strip_comments=True).strip()
+    return sql_cleaned
+
 
 def read_blob(filename: str):
     "Read the SQL Scripts from the blob container"
@@ -34,7 +40,7 @@ def read_blob(filename: str):
                                         credential= "6n/WfghjW+2xAN2h1iCiYxELJPADDC9h5Fr+iLbg+/1kBSoD8eVSeyeStKEyALWyNRE4XEBT8OJY+ASt5EspHQ==",
                                         container_name = input_container)
         contents = blobservice.get_blob_client(filename).download_blob().readall()
-     
+        contents = trim_sql_query(contents)
         print(f"Successfully read the file - {filename} from blob container!")
         return contents
     except Exception as e:
@@ -55,7 +61,7 @@ def read_questions_list(sql: str, filename: str):
 
 def count_tokens(copmletios):
     """Return the number of tokens used in the prompt"""
-    number_tokens = copmletios["usage"]["prompt_tokens"]
+    number_tokens = copmletios.usage.prompt_tokens
     if number_tokens < 4096:    ## the maximum number of tokens that OpenAI can in prompts
         print(f"{number_tokens} prompt tokens counted by the OpenAI API.")
     else:
@@ -80,7 +86,7 @@ def connect_openai(filename: str,prompts: list, questions: list):
                                                         temperature= 0.3)   #range(0,1) lower value more focused and deterministic higher value more randomness and variability in the output.
             count_tokens(completion)
             resp.append({"questionId": m+1,
-                         "number of tokens": completion["usage"]["prompt_tokens"],
+                         "number of tokens": completion.usage.prompt_tokens,
                           questions[m]: completion.choices[0].message.content})
             
             questions_count = questions_count + 1
