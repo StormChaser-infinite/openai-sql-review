@@ -53,6 +53,15 @@ def read_questions_list(sql: str, filename: str):
     return messages,questions
 
 
+def count_tokens(copmletios):
+    """Return the number of tokens used in the prompt"""
+    number_tokens = copmletios["usage"]["prompt_tokens"]
+    if number_tokens < 4096:    ## the maximum number of tokens that OpenAI can in prompts
+        print(f"{number_tokens} prompt tokens counted by the OpenAI API.")
+    else:
+        print(f"Warnning! The query is too long and exceeds the token limit. ")
+
+
 def connect_openai(filename: str,prompts: list, questions: list):
     """connect to Azure openai and run promots to retrive the response"""
     file_reviewed = filename[0:filename.find('.')]
@@ -67,10 +76,13 @@ def connect_openai(filename: str,prompts: list, questions: list):
                             api_key= "a95055f384dd4051a696499d00a064a3")
         for m in range(0, len(prompts)):
             completion = client.chat.completions.create( model="cd-kmrt-sbx-gpt4",  
-                                                        messages=[{"role": "user","content": prompts[m]},])
-            
+                                                        messages=[{"role": "user","content": prompts[m]},], 
+                                                        temperature= 0.3)   #range(0,1) lower value more focused and deterministic higher value more randomness and variability in the output.
+            count_tokens(completion)
             resp.append({"questionId": m+1,
+                         "number of tokens": completion["usage"]["prompt_tokens"],
                           questions[m]: completion.choices[0].message.content})
+            
             questions_count = questions_count + 1
 
         response.update({"responses": resp})
