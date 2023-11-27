@@ -9,3 +9,5 @@ python-dotenv
 openai
 chardet
 sqlparse
+pandas
+openpyxl
