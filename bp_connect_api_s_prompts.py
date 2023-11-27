@@ -53,8 +53,8 @@ def read_questions_list(sql: str, filename: str):
     messages = []
     questions = []
     for key, value in data.items():
-        messages.append(f"the SQL query is: {sql}. {value}.")
-        questions.append(f"the SQL query is: {filename}. {value}.")
+        messages.append(f"the SQL query is: {sql}. {value}")
+        questions.append(value)
 
     return messages,questions
 
