@@ -31,7 +31,7 @@ def create_sub_folders(subfoldername: str, filename: str):
         # commit the changes to the repo
         repo.git.add(subfolder_path)
         repo.git.commit("-m", f"Added '{subfoldername}' subfolder")
-        print("Commit succeeded with the file uploaded: {subfoldername}, {filename} ")
+        print(f"Commit succeeded with the file uploaded: {subfoldername}, {filename} ")
 
     except Exception as e:
         print(f"Create subfolder {subfoldername} and upload the file {filename} failed because {e}")
