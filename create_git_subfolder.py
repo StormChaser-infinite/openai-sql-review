@@ -60,7 +60,7 @@ def write_blob( subfolder: str, filename: str):
         print(f"Fails to connect to the blob container, the error is {e}.")
 
 def main():
-    subfolder_name = "lilisun"
+    subfolder_name = "LISU"
     sql_input_name = "Test.txt"
     create_subfolders(subfolder_name, sql_input_name)
     write_blob(subfolder_name, sql_input_name)
