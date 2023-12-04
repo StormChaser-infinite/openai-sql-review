@@ -29,8 +29,8 @@ def create_sub_folders(subfoldername: str, filename: str):
             file.close()
 
         # commit the changes to the repo
-        repo.git.add(subfolder_path)
-        repo.git.index.commit("-m", f"Added '{subfoldername}' subfolder")
+        repo.index.add([file_path])
+        repo.index.commit(f"Added '{subfoldername}' subfolder")
         origin = repo.remote(name='origin')
         origin.push()
         print(f"Commit succeeded with the file uploaded: {subfoldername}, {filename} ")
