@@ -1,7 +1,7 @@
 from git import Repo 
 import os
 
-def create_sub_folders(subfoldername: str, filename: str):
+def create_subfolders(subfoldername: str, filename: str):
     """Create a subfolder with users' initial or email address when uploading the sql text file"""
     try:
         current_dir = os.getcwd()
@@ -41,7 +41,7 @@ def create_sub_folders(subfoldername: str, filename: str):
 def main():
     subfolder_name = "lilisun1"
     sql_input_name = "Test.txt"
-    create_sub_folders(subfolder_name, sql_input_name)
+    create_subfolders(subfolder_name, sql_input_name)
 
 main()
 
