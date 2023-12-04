@@ -30,14 +30,16 @@ def create_sub_folders(subfoldername: str, filename: str):
 
         # commit the changes to the repo
         repo.git.add(subfolder_path)
-        repo.git.commit("-m", f"Added '{subfoldername}' subfolder")
+        repo.git.index.commit("-m", f"Added '{subfoldername}' subfolder")
+        origin = repo.remote(name='origin')
+        origin.push()
         print(f"Commit succeeded with the file uploaded: {subfoldername}, {filename} ")
 
     except Exception as e:
         print(f"Create subfolder {subfoldername} and upload the file {filename} failed because {e}")
 
 def main():
-    subfolder_name = "LISU"
+    subfolder_name = "lilisun1"
     sql_input_name = "Test.txt"
     create_sub_folders(subfolder_name, sql_input_name)
 
