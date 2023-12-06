@@ -11,3 +11,4 @@ chardet
 sqlparse
 pandas
 openpyxl
+numpy
