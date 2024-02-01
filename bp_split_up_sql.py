@@ -3,7 +3,7 @@ from azure.storage.blob import ContainerClient, BlobServiceClient, BlobClient
 import logging
 import re
 import os
-
+import chardet
 
 check_list = ["create view", "create function", "create procedure"]
 # connectionstring = "DefaultEndpointsProtocol=https;AccountName=kittsqlmodel;AccountKey=6n/WfghjW+2xAN2h1iCiYxELJPADDC9h5Fr+iLbg+/1kBSoD8eVSeyeStKEyALWyNRE4XEBT8OJY+ASt5EspHQ==;EndpointSuffix=core.windows.net"
@@ -27,13 +27,12 @@ def split_sql_input(myblob: func.InputStream):
         
         blobService = BlobServiceClient.from_connection_string(conn_str = os.environ.get("AzureWebJobsStorage"))
         blob_client = blobService.get_blob_client(myblob.name[0:myblob.name.find("/")], myblob.name[myblob.name.find("/")+1:])
+        decode_type = chardet.detect(blob_client.download_blob().readall())['encoding']
+        
         try:
-            sqllines = blob_client.download_blob().readall().decode('utf-8')
-        except: 
-            try:
-                sqllines = blob_client.download_blob().readall().decode('utf-16')
-            except Exception as e:
-                print(f"The input file {myblob.name} cannot open!")
+            sqllines = blob_client.download_blob().readall().decode(decode_type)
+        except Exception as e:
+            print(f"The file could not be read due to {e}")
 
         counts = 0
         sql_lines = sqllines.split('\n')
