@@ -1,0 +1,5 @@
+{ "Q1": "Summarise the SQL query.",
+  "Q2": "what will return if the input timeprofile is 2D?",
+  "Q3": "what will return if the input timeprofile is null?"
+
+  }
