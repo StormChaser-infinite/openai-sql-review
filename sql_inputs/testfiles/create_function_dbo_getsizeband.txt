@@ -1,0 +1,38 @@
+GO
+/****** Object:  UserDefinedFunction [dbo].[GetSizeBand]    Script Date: 2/11/2023 1:33:40 pm ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE FUNCTION [dbo].[GetSizeBand]
+(
+	@balance DECIMAL(18,2)
+)
+RETURNS VARCHAR(10)
+AS
+BEGIN
+
+/********************************************************************************************************
+ * Return size band according to BS13 Table 3
+ * This allocates a provider of non-market funding to the bank to the size band corresponding to that person’s total assets held at the bank on a given date.
+ *
+ ********************************************************************************************************
+ *
+ * @version 1.0
+ * @author	Stephen Chin
+ * @date	2020.08.13
+ * 
+ * - Start version control
+ * 
+*/
+
+RETURN CASE WHEN ABS(@balance) BETWEEN 0 AND 5000000 THEN '0-5mn'
+			WHEN ABS(@balance) BETWEEN 5000000 AND 10000000 THEN '5mn-10mn'
+			WHEN ABS(@balance) BETWEEN 10000000 AND 20000000 THEN '10mn-20mn'
+			WHEN ABS(@balance) BETWEEN 20000000 AND 50000000 THEN '20mn-50mn'
+			WHEN ABS(@balance) > 50000000 THEN 'Over 50mn' END
+
+END
+
