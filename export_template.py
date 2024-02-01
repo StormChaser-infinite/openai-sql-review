@@ -15,7 +15,7 @@ output_container = "sql-model-review-template"
 def connect_cusmosdb(filename: str, prompt_list: list):
     """select the files and date when export the findings"""
     try:
-        CONNECTION_STRING = "mongodb://kitt-sql-review:mPyy7ouKIKP1qZ6PeE636ByyE158Zcq6ErZLOEdMJUNfupAPcJ445jEw0bPPOMhF3rZn9rg7RRsGACDbuyUrUw==@kitt-sql-review.mongo.cosmos.azure.com:10255/?ssl=true&retrywrites=false&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@kitt-sql-review@"
+        CONNECTION_STRING = "mongodb://kitt-sql-review:hfM2p34q75uIxLRJtQfYNbZk8Y4RmAJMSlb5SRtXp6NfMhVQfzSevb7FcQ95MJdGqqX59bQQoHp3ACDbvHrHgw==@kitt-sql-review.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@kitt-sql-review@"
         mglient = pymongo.MongoClient(CONNECTION_STRING)
         collection = mglient[cosmos_db_name][collection_name]
         select_prompts = {}
@@ -43,7 +43,7 @@ def update_engagement_dic(filename: str, prompt_list: list ):
 def save_file_container(file_name: str):
     try:
         output_file = file_name + '.xlsx'
-        blobService = BlobServiceClient.from_connection_string(conn_str = "DefaultEndpointsProtocol=https;AccountName=kittsqlmodel;AccountKey=6n/WfghjW+2xAN2h1iCiYxELJPADDC9h5Fr+iLbg+/1kBSoD8eVSeyeStKEyALWyNRE4XEBT8OJY+ASt5EspHQ==;EndpointSuffix=core.windows.net")
+        blobService = BlobServiceClient.from_connection_string(conn_str = "DefaultEndpointsProtocol=https;AccountName=prodkittsqlmodel;AccountKey=dH2zsQDaDtA4fBgPQMCK1TaVM/F6HCQ56kG+6fHqddulxR8FAe6V/JPh8wKRjiwNmm1/8F1WPUVn+AStAxElrg==;EndpointSuffix=core.windows.net")
         blob_client = blobService.get_blob_client(output_container, output_file)
         with open(output_file, "rb") as data:
             blob_client.upload_blob(data, overwrite=True)
