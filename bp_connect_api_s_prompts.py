@@ -36,8 +36,8 @@ def trim_sql_query(sqistring: str):
 def read_blob(filename: str):
     "Read the SQL Scripts from the blob container"
     try: 
-        blobservice = ContainerClient(account_url = "https://kittsqlmodel.blob.core.windows.net", 
-                                        credential= "6n/WfghjW+2xAN2h1iCiYxELJPADDC9h5Fr+iLbg+/1kBSoD8eVSeyeStKEyALWyNRE4XEBT8OJY+ASt5EspHQ==",
+        blobservice = ContainerClient(account_url = "https://prodkittsqlmodel.blob.core.windows.net", 
+                                        credential= "dH2zsQDaDtA4fBgPQMCK1TaVM/F6HCQ56kG+6fHqddulxR8FAe6V/JPh8wKRjiwNmm1/8F1WPUVn+AStAxElrg==",
                                         container_name = input_container)
         contents = blobservice.get_blob_client(filename).download_blob().readall()
         contents = trim_sql_query(contents)
@@ -103,11 +103,11 @@ def connect_openai(filename: str,prompts: list, questions: list):
 def save_reponses(messages: dict):
     """Save the responses to the Cusmos DB"""
     try:
-        CONNECTION_STRING = "mongodb://kitt-sql-review:mPyy7ouKIKP1qZ6PeE636ByyE158Zcq6ErZLOEdMJUNfupAPcJ445jEw0bPPOMhF3rZn9rg7RRsGACDbuyUrUw==@kitt-sql-review.mongo.cosmos.azure.com:10255/?ssl=true&retrywrites=false&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@kitt-sql-review@"
+        CONNECTION_STRING = "mongodb://kitt-sql-review:hfM2p34q75uIxLRJtQfYNbZk8Y4RmAJMSlb5SRtXp6NfMhVQfzSevb7FcQ95MJdGqqX59bQQoHp3ACDbvHrHgw==@kitt-sql-review.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@kitt-sql-review@"
         mglient = pymongo.MongoClient(CONNECTION_STRING)
         collection = mglient[cosmos_db_name][collection_name]
         ## check the collection exists or not
-        if "kitt-collection" not in mglient[cosmos_db_name].list_collection_names():
+        if collection_name not in mglient[cosmos_db_name].list_collection_names():
         # Creates a unsharded collection that uses the DBs shared throughput
             mglient[cosmos_db_name].command({"customAction": "CreateCollection", "collection": collection_name})
             print("Created collection '{}'.\n".format(collection_name))
